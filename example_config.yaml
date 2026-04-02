@@ -1,0 +1,35 @@
+# Drift Sentinel Example Configuration
+
+detectors:
+  - type: psi
+    threshold: 0.2
+    n_bins: 10
+  - type: ks
+    threshold: 0.05
+  - type: jensen_shannon
+    threshold: 0.1
+  - type: chi_squared
+    threshold: 0.05
+
+# Optional: feature names for reporting
+feature_names:
+  - age
+  - income
+  - credit_score
+  - loan_amount
+
+# Alerting (uncomment to enable)
+# alerts:
+#   - type: slack
+#     webhook_url: https://hooks.slack.com/services/your/webhook
+#   - type: email
+#     smtp_host: smtp.gmail.com
+#     smtp_port: 587
+#     username: your-email@gmail.com
+#     password: app-password
+#     from_addr: drift-sentinel@yourdomain.com
+#     to_addrs:
+#       - team@yourdomain.com
+#   - type: pagerduty
+#     routing_key: your-routing-key
+#     severity: warning
