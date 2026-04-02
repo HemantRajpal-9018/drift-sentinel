@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
 
 import numpy as np
@@ -150,7 +150,7 @@ class DriftMonitor:
 
     def _record_history(self, results: list[DriftResult]) -> None:
         entry = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "has_drift": any(r.is_drift for r in results),
             "n_detectors": len(results),
             "n_drifted": sum(1 for r in results if r.is_drift),

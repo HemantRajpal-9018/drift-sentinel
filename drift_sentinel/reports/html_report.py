@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import base64
 import io
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -204,7 +204,7 @@ class HTMLReportGenerator:
         template = Template(REPORT_TEMPLATE)
         html = template.render(
             title=self.title,
-            generated_at=datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
+            generated_at=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
             has_drift=any(r.is_drift for r in results),
             total_detectors=len(results),
             n_drifted=sum(1 for r in results if r.is_drift),

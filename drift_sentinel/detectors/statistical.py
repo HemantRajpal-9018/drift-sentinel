@@ -158,11 +158,12 @@ class ChiSquaredTest(BaseDetector):
             [np.sum(current == cat) for cat in all_categories], dtype=float
         )
 
-        # Scale expected counts to match observed total
-        expected = ref_counts * (cur_counts.sum() / ref_counts.sum())
-        # Avoid zero expected
-        mask = expected > 0
-        if mask.sum() == 0:
+        # Add small epsilon to avoid zero expected values while preserving totals
+        eps = 1e-8
+        ref_counts_adj = ref_counts + eps
+        expected = ref_counts_adj * (cur_counts.sum() / ref_counts_adj.sum())
+
+        if expected.sum() == 0:
             return DriftResult(
                 detector_name=self.name,
                 is_drift=False,
@@ -171,7 +172,7 @@ class ChiSquaredTest(BaseDetector):
                 p_value=1.0,
             )
 
-        statistic, p_value = stats.chisquare(cur_counts[mask], f_exp=expected[mask])
+        statistic, p_value = stats.chisquare(cur_counts, f_exp=expected)
 
         return DriftResult(
             detector_name=self.name,
