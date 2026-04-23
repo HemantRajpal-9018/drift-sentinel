@@ -107,12 +107,12 @@ jobs:
             fi
           fi
 
-          if git diff --quiet; then
+          if [ -z "$(git status --porcelain)" ]; then
             echo "has_changes=false" >> "$GITHUB_OUTPUT"
             echo "No meaningful maintenance changes detected."
           else
             echo "has_changes=true" >> "$GITHUB_OUTPUT"
-            git diff --stat
+            git status --short
           fi
 
       - name: Open maintenance pull request
